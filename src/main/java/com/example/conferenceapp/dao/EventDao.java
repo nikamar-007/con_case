@@ -65,4 +65,19 @@ public class EventDao {
         }
         return list;
     }
+
+    public List<String> listDirections() {
+        List<String> dirs = new ArrayList<>();
+        String sql = "SELECT name FROM direction ORDER BY name";
+        try (Connection c = DBUtil.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                dirs.add(rs.getString("name"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return dirs;
+    }
 }

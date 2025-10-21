@@ -1,6 +1,7 @@
 package com.example.conferenceapp.controller;
 
 import com.example.conferenceapp.model.Event;
+import com.example.conferenceapp.util.FxUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -49,6 +50,8 @@ public class DetailsController {
             st.setTitle("Информация о мероприятии");
 
             Scene scene = new Scene(fx.load());
+            FxUtil.applyAppStyles(scene);
+            FxUtil.applyAppIcon(st);
             st.setScene(scene);
 
             DetailsController c = fx.getController();
