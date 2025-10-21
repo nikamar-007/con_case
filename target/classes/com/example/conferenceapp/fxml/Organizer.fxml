@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.conferenceapp.controller.OrganizerController"
+      spacing="20" style="-fx-padding: 30;">
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <ImageView fx:id="photo" fitWidth="96" fitHeight="96" preserveRatio="true"/>
+        <Label fx:id="greeting" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <!-- здесь позже добавим вкладки/таблицы организатора -->
+    <Label text="Здесь будут инструменты управления мероприятиями…"/>
+</VBox>

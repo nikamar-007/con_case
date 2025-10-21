@@ -1,0 +1,17 @@
+com\example\conferenceapp\controller\JuryController.class
+com\example\conferenceapp\dao\UserDao.class
+com\example\conferenceapp\controller\MainController.class
+com\example\conferenceapp\util\DBUtil.class
+com\example\conferenceapp\Main.class
+com\example\conferenceapp\model\User$Role.class
+com\example\conferenceapp\controller\ParticipantController.class
+com\example\conferenceapp\model\User.class
+com\example\conferenceapp\controller\LoginController.class
+com\example\conferenceapp\util\CaptchaUtil$Captcha.class
+com\example\conferenceapp\model\Event.class
+com\example\conferenceapp\controller\ModeratorController.class
+com\example\conferenceapp\dao\EventDao.class
+com\example\conferenceapp\controller\LoginController$1.class
+com\example\conferenceapp\util\CaptchaUtil.class
+com\example\conferenceapp\controller\DetailsController.class
+com\example\conferenceapp\controller\OrganizerController.class
