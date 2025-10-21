@@ -9,6 +9,7 @@ public class Event {
     private String title;
     private String direction;
     private LocalDateTime start;
+    private LocalDateTime end;
     private String logoPath;
 
     /* новые поля */
@@ -17,12 +18,14 @@ public class Event {
     private String description;
 
     public Event(int id, String title, String direction,
-                 LocalDateTime start, String logoPath,
+                 LocalDateTime start, LocalDateTime end,
+                 String logoPath,
                  String city, String organizer, String description) {
         this.id          = id;
         this.title       = title;
         this.direction   = direction;
         this.start       = start;
+        this.end         = end;
         this.logoPath    = logoPath;
         this.city        = city;
         this.organizer   = organizer;
@@ -35,6 +38,7 @@ public class Event {
     public String         getDirection()   { return direction; }
     public LocalDateTime  getStart()       { return start; }
     public String         getLogoPath()    { return logoPath; }
+    public LocalDateTime  getEnd()         { return end; }
     public String         getCity()        { return city; }
     public String         getOrganizer()   { return organizer; }
     public String         getDescription() { return description; }

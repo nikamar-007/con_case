@@ -18,6 +18,7 @@ public class EventDao {
                    e.title,
                    d.name            AS dir_name,
                    e.start_datetime,
+                   e.end_datetime,
                    e.logo,
                    g.name            AS city,
                    u.full_name       AS organizer,
@@ -51,8 +52,9 @@ public class EventDao {
                             rs.getInt   ("id"),
                             rs.getString("title"),
                             rs.getString("dir_name"),
-                            rs.getTimestamp("start_datetime")
-                                    .toLocalDateTime(),
+                            rs.getTimestamp("start_datetime").toLocalDateTime(),
+                            rs.getTimestamp("end_datetime") != null ?
+                                    rs.getTimestamp("end_datetime").toLocalDateTime() : null,
                             rs.getString("logo"),
                             rs.getString("city"),
                             rs.getString("organizer"),
@@ -64,5 +66,20 @@ public class EventDao {
             ex.printStackTrace();       // замените на логгер при желании
         }
         return list;
+    }
+
+    public List<String> listDirections() {
+        List<String> dirs = new ArrayList<>();
+        String sql = "SELECT name FROM direction ORDER BY name";
+        try (Connection c = DBUtil.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                dirs.add(rs.getString("name"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return dirs;
     }
 }

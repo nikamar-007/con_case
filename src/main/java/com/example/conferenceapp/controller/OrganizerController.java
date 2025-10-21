@@ -1,11 +1,11 @@
 package com.example.conferenceapp.controller;
 
 import com.example.conferenceapp.model.User;   // сделайте сущность пользователя
+import com.example.conferenceapp.util.FxUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -17,21 +17,29 @@ public class OrganizerController {
 
     @FXML private ImageView photo;
     @FXML private Label greeting;
+    private User user;
 
     /* инициализация с данными пользователя */
     public void setUser(User u) {
+        this.user = u;
         String partOfDay = partOfDay(LocalTime.now());
         greeting.setText(String.format("%s, %s %s!",
                 partOfDay, u.getFirstName(), u.getMiddleName()));
 
-        if (u.getPhotoPath() != null)
-            photo.setImage(new Image("file:" + u.getPhotoPath()));
+        FxUtil.loadUserPhoto(photo, u.getPhotoPath());
     }
 
     private String partOfDay(LocalTime t) {
         if (t.isBefore(LocalTime.of(11,1)))      return "Доброе утро";
         if (t.isBefore(LocalTime.of(18,1)))      return "Добрый день";
         else                                     return "Добрый вечер";
+    }
+
+    @FXML
+    private void onProfile() {
+        if (user != null) {
+            ProfileController.open(user);
+        }
     }
 
     /* статический фабричный метод */
@@ -42,9 +50,11 @@ public class OrganizerController {
                             "/com/example/conferenceapp/fxml/Organizer.fxml"));
             Stage st = new Stage();
             st.initModality(Modality.APPLICATION_MODAL);
-            st.setTitle("Окно организатора");
+            st.setTitle("Организатор: " + u.getFullName());
 
             Scene scene = new Scene(fx.load());
+            FxUtil.applyAppStyles(scene);
+            FxUtil.applyAppIcon(st);
             st.setScene(scene);
 
             OrganizerController c = fx.getController();

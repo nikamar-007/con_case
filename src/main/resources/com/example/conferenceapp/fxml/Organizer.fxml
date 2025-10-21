@@ -11,6 +11,8 @@
     <HBox spacing="15" alignment="CENTER_LEFT">
         <ImageView fx:id="photo" fitWidth="96" fitHeight="96" preserveRatio="true"/>
         <Label fx:id="greeting" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button text="Профиль" onAction="#onProfile"/>
     </HBox>
 
     <!-- здесь позже добавим вкладки/таблицы организатора -->

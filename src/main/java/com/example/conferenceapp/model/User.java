@@ -10,48 +10,93 @@ package com.example.conferenceapp.model;
  *  photoPath     — относительный или абсолютный путь к фотографии
  * </pre>
  */
+import java.time.LocalDate;
+
 public class User {
 
     public enum Role { PARTICIPANT, MODERATOR, ORGANIZER, JURY }
 
     private final int    id;
     private final String idNumber;
-    private final String fullName;
+    private final String fullName;      // ФИО из БД (может быть null)
+    private final String displayName;   // то, что показываем пользователю
     private final Role   role;
     private final String photoPath;
+    private final Integer directionId;
+    private final String directionName;
+    private final String email;
+    private final String phone;
+    private final LocalDate birthDate;
+    private final String gender;
+    private final String countryName;
 
     public User(int id,
                 String idNumber,
                 String fullName,
+                String displayName,
                 Role role,
-                String photoPath) {
+                String photoPath,
+                Integer directionId,
+                String directionName,
+                String email,
+                String phone,
+                LocalDate birthDate,
+                String gender,
+                String countryName) {
         this.id        = id;
         this.idNumber  = idNumber;
         this.fullName  = fullName;
+        this.displayName = displayName != null ? displayName : idNumber;
         this.role      = role;
         this.photoPath = photoPath;
+        this.directionId = directionId;
+        this.directionName = directionName;
+        this.email = email;
+        this.phone = phone;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.countryName = countryName;
     }
 
     /* ---------- getters ---------- */
 
     public int    getId()        { return id; }
     public String getIdNumber()  { return idNumber; }
-    public String getFullName()  { return fullName; }
+    public String getFullName()  { return displayName; }
+    public String getRawFullName() { return fullName; }
     public Role   getRole()      { return role; }
     public String getPhotoPath() { return photoPath; }
+    public Integer getDirectionId() { return directionId; }
+    public String getDirectionName() { return directionName; }
+    public String getEmail() { return email; }
+    public String getPhone() { return phone; }
+    public LocalDate getBirthDate() { return birthDate; }
+    public String getGender() { return gender; }
+    public String getCountryName() { return countryName; }
 
     /* ---------- «Имя» и «Отчество» из fullName ---------- */
 
 
     /** вернёт 2-е слово из ФИО либо всё ФИО, если пробелов нет */
     public String getFirstName() {
-        String[] p = fullName.split("\\s+");
-        return p.length > 1 ? p[1] : fullName;
+        String base = baseName();
+        if (base.isEmpty()) return idNumber;
+        String[] p = base.split("\\s+");
+        return p.length > 1 ? p[1] : p[0];
     }
 
     /** вернёт 3-е слово (отчество) либо пустую строку */
     public String getMiddleName() {
-        String[] p = fullName.split("\\s+");
+        String base = baseName();
+        if (base.isEmpty()) return "";
+        String[] p = base.split("\\s+");
         return p.length > 2 ? p[2] : "";
+    }
+
+    private String baseName() {
+        String candidate = fullName != null && !fullName.isBlank()
+                ? fullName
+                : displayName;
+        return candidate != null ? candidate.trim() : "";
     }
 }

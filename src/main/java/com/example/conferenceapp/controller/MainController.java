@@ -27,6 +27,7 @@ public class MainController {
     @FXML private TableColumn<Event, String> titleCol;
     @FXML private TableColumn<Event, String> directionCol;
     @FXML private TableColumn<Event, String> dateCol;
+    @FXML private TableColumn<Event, String> timeCol;
     @FXML private Button loginBtn;
 
     /* ---------- данные ---------- */
@@ -55,12 +56,15 @@ public class MainController {
         titleCol    .setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue().getTitle()));
         directionCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue().getDirection()));
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        DateTimeFormatter tf = DateTimeFormatter.ofPattern("HH:mm");
         dateCol     .setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue().getStart().format(df)));
+        timeCol     .setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(formatPeriod(p.getValue(), tf)));
 
         eventTable.setItems(filtered);
 
         /* данные + фильтры */
         loadData();
+        loadDirections();
         directionFilter.setOnAction(e -> applyFilters());
         dateFilter     .setOnAction(e -> applyFilters());
 
@@ -78,11 +82,27 @@ public class MainController {
         });
     }
 
+    private String formatPeriod(Event event, DateTimeFormatter tf) {
+        if (event.getStart() == null) {
+            return "—";
+        }
+        String start = event.getStart().format(tf);
+        String end = event.getEnd() != null ? event.getEnd().format(tf) : "??";
+        return start + " – " + end;
+    }
+
 
     /* ---------- загрузка всех мероприятий из DAO ---------- */
     private void loadData() {
         List<Event> all = eventDao.find(null, null);
         master.setAll(all);
+    }
+
+    private void loadDirections() {
+        ObservableList<String> dirs = FXCollections.observableArrayList(eventDao.listDirections());
+        directionFilter.setItems(dirs);
+        directionFilter.getSelectionModel().clearSelection();
+        directionFilter.setValue(null);
     }
 
     /* ---------- применение фильтров ---------- */

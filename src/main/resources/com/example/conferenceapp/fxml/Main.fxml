@@ -39,6 +39,7 @@
                     <TableColumn fx:id="titleCol" text="Название" prefWidth="350"/>
                     <TableColumn fx:id="directionCol" text="Направление" prefWidth="180"/>
                     <TableColumn fx:id="dateCol" text="Дата" prefWidth="120"/>
+                    <TableColumn fx:id="timeCol" text="Время" prefWidth="120"/>
                 </columns>
             </TableView>
         </VBox>

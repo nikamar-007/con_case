@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefWidth="1024.0" prefHeight="768.0"
-            xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns="http://javafx.com/javafx/20"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.conferenceapp.controller.ModeratorController">
-    <!-- TODO: Design UI here -->
-</AnchorPane>
+
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="pane-secondary">
+            <ImageView fx:id="photo" fitWidth="88" fitHeight="88" preserveRatio="true"/>
+            <VBox spacing="5">
+                <Label text="Кабинет модератора" style="-fx-font-size: 14px;"/>
+                <Label fx:id="nameLabel" style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+                <Label fx:id="directionLabel" style="-fx-font-size: 14px;"/>
+            </VBox>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="countLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <Button text="Профиль" onAction="#onProfile"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <Label text="Назначенные активности" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <TableView fx:id="activityTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="eventCol" text="Мероприятие" prefWidth="190"/>
+                    <TableColumn fx:id="titleCol" text="Активность" prefWidth="240"/>
+                    <TableColumn fx:id="dateCol" text="Дата" prefWidth="150"/>
+                    <TableColumn fx:id="directionCol" text="Направление" prefWidth="160"/>
+                    <TableColumn fx:id="timeCol" text="Время" prefWidth="150"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

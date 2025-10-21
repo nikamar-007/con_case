@@ -21,17 +21,20 @@
             <Label text="Дата:"         GridPane.rowIndex="0" GridPane.columnIndex="0"/>
             <Label fx:id="date"         GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-            <Label text="Город:"        GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <Label fx:id="city"         GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label text="Время:"        GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Label fx:id="time"        GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-            <Label text="Организатор:"  GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-            <Label fx:id="organizer"    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            <Label text="Город:"        GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <Label fx:id="city"         GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-            <Label text="Описание:"     GridPane.rowIndex="3" GridPane.columnIndex="0"
+            <Label text="Организатор:"  GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <Label fx:id="organizer"    GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Описание:"     GridPane.rowIndex="4" GridPane.columnIndex="0"
                    GridPane.valignment="TOP"/>
             <TextArea fx:id="description" editable="false" wrapText="true"
                       prefRowCount="6"
-                      GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                      GridPane.rowIndex="4" GridPane.columnIndex="1"/>
         </GridPane>
     </center>
 </BorderPane>
