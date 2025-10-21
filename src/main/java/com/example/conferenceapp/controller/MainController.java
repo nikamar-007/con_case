@@ -61,6 +61,7 @@ public class MainController {
 
         /* данные + фильтры */
         loadData();
+        loadDirections();
         directionFilter.setOnAction(e -> applyFilters());
         dateFilter     .setOnAction(e -> applyFilters());
 
@@ -83,6 +84,13 @@ public class MainController {
     private void loadData() {
         List<Event> all = eventDao.find(null, null);
         master.setAll(all);
+    }
+
+    private void loadDirections() {
+        ObservableList<String> dirs = FXCollections.observableArrayList(eventDao.listDirections());
+        directionFilter.setItems(dirs);
+        directionFilter.getSelectionModel().clearSelection();
+        directionFilter.setValue(null);
     }
 
     /* ---------- применение фильтров ---------- */

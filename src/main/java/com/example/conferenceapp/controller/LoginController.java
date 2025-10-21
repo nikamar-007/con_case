@@ -3,6 +3,7 @@ package com.example.conferenceapp.controller;
 import com.example.conferenceapp.dao.UserDao;
 import com.example.conferenceapp.model.User;
 import com.example.conferenceapp.util.CaptchaUtil;
+import com.example.conferenceapp.util.FxUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -33,6 +34,7 @@ public class LoginController {
     private boolean locked = false;
 
     public void initialize() {
+        loadRememberedUser();
         refreshCaptcha();
     }
 
@@ -63,6 +65,7 @@ public class LoginController {
             showError("Неверный ID или пароль");
             handleFailedAttempt();
         } else {
+            userDao.updateRemembered(u.getId(), rememberCheck.isSelected());
             // успех — открыть окно в зависимости от роли
             openRoleWindow(u);
             ((Stage) loginBtn.getScene().getWindow()).close();
@@ -106,20 +109,11 @@ public class LoginController {
     }
 
     private void openRoleWindow(User u) {
-        String fxml = switch (u.getRole()) {
-            case ORGANIZER  -> "/com/example/conferenceapp/fxml/Organizer.fxml";
-            case MODERATOR  -> "/com/example/conferenceapp/fxml/Moderator.fxml";
-            case JURY       -> "/com/example/conferenceapp/fxml/Jury.fxml";
-            default         -> "/com/example/conferenceapp/fxml/Participant.fxml";
-        };
-        try {
-            Stage st = new Stage();
-            st.setScene(new Scene(FXMLLoader.load(getClass().getResource(fxml))));
-            st.setTitle("Добро пожаловать, " + u.getFullName());
-            st.initModality(Modality.WINDOW_MODAL);
-            st.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        switch (u.getRole()) {
+            case ORGANIZER -> OrganizerController.open(u);
+            case MODERATOR -> ModeratorController.open(u);
+            case JURY      -> JuryController.open(u);
+            default        -> ParticipantController.open(u);
         }
     }
 
@@ -127,13 +121,25 @@ public class LoginController {
     public static void open() {
         try {
             Stage st = new Stage();
-            st.setScene(new Scene(FXMLLoader.load(LoginController.class.getResource(
-                    "/com/example/conferenceapp/fxml/Login.fxml"))));
+            FXMLLoader fx = new FXMLLoader(LoginController.class.getResource(
+                    "/com/example/conferenceapp/fxml/Login.fxml"));
+            Scene scene = new Scene(fx.load());
+            FxUtil.applyAppStyles(scene);
+            FxUtil.applyAppIcon(st);
+            st.setScene(scene);
             st.setTitle("Авторизация");
             st.initModality(Modality.APPLICATION_MODAL);
             st.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void loadRememberedUser() {
+        User remembered = userDao.findRemembered();
+        if (remembered != null) {
+            idField.setText(remembered.getIdNumber());
+            rememberCheck.setSelected(true);
         }
     }
 }

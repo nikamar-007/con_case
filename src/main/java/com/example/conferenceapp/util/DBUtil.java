@@ -5,9 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBUtil {
-    private static final String URL = "jdbc:mysql://localhost:3306/conference_db?serverTimezone=UTC&useSSL=false";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String URL = System.getenv().getOrDefault(
+            "DB_URL",
+            "jdbc:mysql://localhost:3306/conference_db?serverTimezone=UTC&useSSL=false");
+    private static final String USER = System.getenv().getOrDefault("DB_USER", "conference_user");
+    private static final String PASSWORD = System.getenv().getOrDefault("DB_PASSWORD", "your_password");
 
     static {
         try {
