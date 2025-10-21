@@ -2,6 +2,7 @@ package com.example.conferenceapp.controller;
 
 import com.example.conferenceapp.dao.EventDao;
 import com.example.conferenceapp.model.Event;
+import com.example.conferenceapp.util.FxUtil;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,18 +47,23 @@ public class MainController {
 
         /* колонки таблицы */
         logoCol.setCellValueFactory(p -> {
-            String path = p.getValue().getLogoPath();
-            ImageView iv = new ImageView(path != null
-                    ? new Image("file:" + path, 64, 64, true, true)
-                    : null);
-            iv.setFitHeight(60); iv.setFitWidth(60);
+            ImageView iv = new ImageView();
+            iv.setFitHeight(60);
+            iv.setFitWidth(60);
+            iv.setPreserveRatio(true);
+            FxUtil.loadEventLogo(iv, p.getValue().getLogoPath());
             return new ReadOnlyObjectWrapper<>(iv);
         });
         titleCol    .setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue().getTitle()));
         directionCol.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue().getDirection()));
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         DateTimeFormatter tf = DateTimeFormatter.ofPattern("HH:mm");
-        dateCol     .setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue().getStart().format(df)));
+        dateCol     .setCellValueFactory(p -> {
+            if (p.getValue().getStart() == null) {
+                return new ReadOnlyObjectWrapper<>("—");
+            }
+            return new ReadOnlyObjectWrapper<>(p.getValue().getStart().format(df));
+        });
         timeCol     .setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(formatPeriod(p.getValue(), tf)));
 
         eventTable.setItems(filtered);

@@ -21,7 +21,7 @@ public class UserDao {
                    r.code,
                    u.direction_id,
                    d.name AS direction_name,
-                   c.name AS country_name
+                   c.name_ru         AS country_name
             FROM user u
             JOIN role r      ON u.role_id = r.id
             LEFT JOIN direction d ON u.direction_id = d.id

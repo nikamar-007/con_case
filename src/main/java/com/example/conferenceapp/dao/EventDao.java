@@ -25,7 +25,7 @@ public class EventDao {
                    e.description
             FROM event e
             JOIN direction d ON e.direction_id  = d.id
-            JOIN city      g ON e.city_id       = g.id
+            LEFT JOIN city  g ON e.city_id       = g.id
             LEFT JOIN user u ON e.organizer_id  = u.id
             WHERE (? IS NULL OR d.name = ?)
               AND (? IS NULL OR DATE(e.start_datetime) = ?)
@@ -48,13 +48,15 @@ public class EventDao {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
+                    Timestamp startTs = rs.getTimestamp("start_datetime");
+                    Timestamp endTs   = rs.getTimestamp("end_datetime");
+
                     list.add(new Event(
                             rs.getInt   ("id"),
                             rs.getString("title"),
                             rs.getString("dir_name"),
-                            rs.getTimestamp("start_datetime").toLocalDateTime(),
-                            rs.getTimestamp("end_datetime") != null ?
-                                    rs.getTimestamp("end_datetime").toLocalDateTime() : null,
+                            startTs != null ? startTs.toLocalDateTime() : null,
+                            endTs   != null ? endTs.toLocalDateTime()   : null,
                             rs.getString("logo"),
                             rs.getString("city"),
                             rs.getString("organizer"),

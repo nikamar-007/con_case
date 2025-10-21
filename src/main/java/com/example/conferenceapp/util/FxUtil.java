@@ -52,20 +52,31 @@ public final class FxUtil {
      * The ImageView is cleared when the photo cannot be found.
      */
     public static void loadUserPhoto(ImageView view, String photoPath) {
+        loadImage(view, photoPath, buildPhotoCandidates(photoPath));
+    }
+
+    /**
+     * Загружает логотип мероприятия, учитывая каталоги импорта и ресурсов приложения.
+     */
+    public static void loadEventLogo(ImageView view, String logoPath) {
+        loadImage(view, logoPath, buildLogoCandidates(logoPath));
+    }
+
+    private static void loadImage(ImageView view, String imagePath, List<Path> candidates) {
         if (view == null) return;
-        if (photoPath == null || photoPath.isBlank()) {
+        if (imagePath == null || imagePath.isBlank()) {
             view.setImage(null);
             return;
         }
 
-        for (Path candidate : buildPhotoCandidates(photoPath)) {
-            if (Files.exists(candidate)) {
+        for (Path candidate : candidates) {
+            if (candidate != null && Files.exists(candidate)) {
                 view.setImage(new Image(candidate.toUri().toString()));
                 return;
             }
         }
 
-        URL resource = FxUtil.class.getResource("/com/example/conferenceapp/images/" + photoPath);
+        URL resource = FxUtil.class.getResource("/com/example/conferenceapp/images/" + imagePath);
         if (resource != null) {
             view.setImage(new Image(resource.toExternalForm()));
         } else {
@@ -86,6 +97,20 @@ public final class FxUtil {
         result.add(Paths.get("Сессия 1", "Модераторы_import", photoPath));
         result.add(Paths.get("Сессия 1", "Жюри_import", photoPath));
         result.add(Paths.get("Сессия 1", "Организаторы_import", photoPath));
+        return result;
+    }
+
+    private static List<Path> buildLogoCandidates(String logoPath) {
+        List<Path> result = new ArrayList<>();
+        Path direct = Paths.get(logoPath);
+        if (direct.isAbsolute()) {
+            result.add(direct);
+            return result;
+        }
+        result.add(direct);
+        result.add(Paths.get("data", "logos", logoPath));
+        result.add(Paths.get("data", "events", logoPath));
+        result.add(Paths.get("Сессия 1", "Мероприятия_import", logoPath));
         return result;
     }
 }
