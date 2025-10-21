@@ -3,6 +3,7 @@ package com.example.conferenceapp.controller;
 import com.example.conferenceapp.dao.ActivityDao;
 import com.example.conferenceapp.model.Activity;
 import com.example.conferenceapp.model.User;
+import com.example.conferenceapp.util.ActivityFormatter;
 import com.example.conferenceapp.util.FxUtil;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -18,7 +19,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ParticipantController {
@@ -35,8 +35,6 @@ public class ParticipantController {
 
     private final ActivityDao activityDao = new ActivityDao();
     private User user;
-    private final DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    private final DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
 
     public void initialize() {
         activityTable.setPlaceholder(new Label("Нет рекомендованных активностей"));
@@ -44,8 +42,8 @@ public class ParticipantController {
         titleCol.setCellValueFactory(c -> new ReadOnlyStringWrapper(c.getValue().getTitle()));
         directionCol.setCellValueFactory(c -> new ReadOnlyStringWrapper(
                 c.getValue().getDirection() == null ? "—" : c.getValue().getDirection()));
-        dateCol.setCellValueFactory(c -> new ReadOnlyStringWrapper(formatDate(c.getValue())));
-        timeCol.setCellValueFactory(c -> new ReadOnlyStringWrapper(formatTime(c.getValue())));
+        dateCol.setCellValueFactory(c -> new ReadOnlyStringWrapper(ActivityFormatter.formatDate(c.getValue())));
+        timeCol.setCellValueFactory(c -> new ReadOnlyStringWrapper(ActivityFormatter.formatTime(c.getValue())));
     }
 
     public void setUser(User u) {
@@ -61,26 +59,6 @@ public class ParticipantController {
         int participantId = user != null ? user.getId() : 0;
         List<Activity> activities = activityDao.findForParticipant(participantId, dirId);
         activityTable.setItems(FXCollections.observableArrayList(activities));
-    }
-
-    private String formatDate(Activity activity) {
-        if (activity.getEventDate() == null) {
-            return "—";
-        }
-        String date = activity.getEventDate().format(dateFmt);
-        if (activity.getDayNum() != null) {
-            return date + " (День " + activity.getDayNum() + ")";
-        }
-        return date;
-    }
-
-    private String formatTime(Activity activity) {
-        if (activity.getStartTime() == null && activity.getEndTime() == null) {
-            return "—";
-        }
-        String start = activity.getStartTime() != null ? activity.getStartTime().format(timeFmt) : "??";
-        String end   = activity.getEndTime()   != null ? activity.getEndTime().format(timeFmt)   : "??";
-        return start + " – " + end;
     }
 
     @FXML
