@@ -42,6 +42,7 @@ public class User {
 
     /* ---------- «Имя» и «Отчество» из fullName ---------- */
 
+
     /** вернёт 2-е слово из ФИО либо всё ФИО, если пробелов нет */
     public String getFirstName() {
         String[] p = fullName.split("\\s+");
